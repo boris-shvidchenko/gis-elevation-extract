@@ -58,7 +58,7 @@ if clipExtent is not '':
 else:
     arcpy.management.Rename(elevationExtract_Dis, elevationExtract_Final)
 arcpy.AddMessage('Feature class renamed.')
- 
+
 # === 7. Delete Features (Optional) ===
 if deleteFiles is True:
     arcpy.AddMessage('Deleting unneeded feature classes...')
@@ -67,4 +67,12 @@ if deleteFiles is True:
         arcpy.management.Delete(elevationExtract_Dis)
     arcpy.AddMessage('Unneeded feature classes deleted.')
 
-# === 8. Add/calculate an 'Acres' field to final polygon  ===
+# === 8. Add an 'Acres' field to final polygon  ===
+arcpy.AddMessage('Adding "Acres" field...')
+arcpy.management.AddField(elevationExtract_Final, 'Acres', 'FLOAT')
+arcpy.AddMessage('"Acres" field added.')
+
+# === 9. Calculate acres ===
+arcpy.AddMessage('Calculating acres...')
+arcpy.management.CalculateGeometryAttributes(elevationExtract_Final, [["Acres", "AREA"]])
+arcpy.AddMessage('Acres calculated.')

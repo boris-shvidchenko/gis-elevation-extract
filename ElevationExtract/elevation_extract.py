@@ -34,7 +34,7 @@ arcpy.AddMessage('Converting to type INT...')
 elevations_int = arcpy.sa.Int(elevations)
 elevations_int.save(elevationExtract_Int)
 arcpy.AddMessage('Successfully converted to type INT.')
-
+ 
 # === 3. Raster to Polygon ===
 arcpy.AddMessage('Exporting to polygon...')
 arcpy.conversion.RasterToPolygon(elevations_int, elevationExtract_Poly)
@@ -70,9 +70,9 @@ if deleteFiles is True:
 # === 8. Add an 'Acres' field to final polygon  ===
 arcpy.AddMessage('Adding "Acres" field...')
 arcpy.management.AddField(elevationExtract_Final, 'Acres', 'FLOAT')
-arcpy.AddMessage('"Acres" field added.')
+arcpy.AddMessage('"Acres" field added.') 
 
 # === 9. Calculate acres ===
 arcpy.AddMessage('Calculating acres...')
-arcpy.management.CalculateGeometryAttributes(elevationExtract_Final, [["Acres", "AREA"]])
+arcpy.management.CalculateGeometryAttributes(elevationExtract_Final, [['Acres', 'AREA']], area_unit = 'ACRES')
 arcpy.AddMessage('Acres calculated.')

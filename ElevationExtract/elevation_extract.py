@@ -11,6 +11,9 @@ deleteFiles = arcpy.GetParameter(5)
 # Formatted elevation variables
 elevStart = int(round(float(elevationStart)))
 elevEnd = int(round(float(elevationEnd)))
+# If negative, replace '-' with 'n' to comply with feature class name requirements
+if elevStart < 0: elevStart = str(elevStart).replace('-', 'n') 
+if elevEnd < 0: elevEnd = str(elevEnd).replace('-', 'n')       
 
 # SQL clause
 sql = 'VALUE >= {0} AND VALUE <= {1}'.format(elevationStart, elevationEnd)
@@ -34,7 +37,7 @@ arcpy.AddMessage('Converting to type INT...')
 elevations_int = arcpy.sa.Int(elevations)
 elevations_int.save(elevationExtract_Int)
 arcpy.AddMessage('Successfully converted to type INT.')
- 
+
 # === 3. Raster to Polygon ===
 arcpy.AddMessage('Exporting to polygon...')
 arcpy.conversion.RasterToPolygon(elevations_int, elevationExtract_Poly)
@@ -70,7 +73,7 @@ if deleteFiles is True:
 # === 8. Add an 'Acres' field to final polygon  ===
 arcpy.AddMessage('Adding "Acres" field...')
 arcpy.management.AddField(elevationExtract_Final, 'Acres', 'FLOAT')
-arcpy.AddMessage('"Acres" field added.') 
+arcpy.AddMessage('"Acres" field added.')
 
 # === 9. Calculate acres ===
 arcpy.AddMessage('Calculating acres...')
